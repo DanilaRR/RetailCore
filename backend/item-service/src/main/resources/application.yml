@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: item-service
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/site
+    username: postgres
+    password: admin
+server:
+  port: 8081

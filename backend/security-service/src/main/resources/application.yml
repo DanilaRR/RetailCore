@@ -1,0 +1,16 @@
+jwt:
+  secret: owqqu4k3dG90fxNR143dFqpEy61pRGBZdfsMaKGAaC0=
+  expiration: 3600000  # 1 hour
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/site
+    username: postgres
+    password: admin
+  security:
+    user:
+      name: admin
+      password: password
+server:
+  port: 8082
+

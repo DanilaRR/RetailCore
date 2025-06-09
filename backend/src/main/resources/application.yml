@@ -1,11 +1,12 @@
 spring:
   application:
-    name: site
+    name: webstore
 
   datasource:
     url: jdbc:postgresql://localhost:5432/site
     username: postgres
     password: admin
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
@@ -13,10 +14,11 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false  # Recommended for better performance
+
+  sql:
+    init:
+      mode: always  # Ensures initialization scripts run if needed
 
   main:
     allow-bean-definition-overriding: true
-
-jwt:
-  secret: qF-l7V5EHMIg-nMfm6-fdxj8xpJ17-l0FdGTGyC5yVY=
-  expiration: 3600000
