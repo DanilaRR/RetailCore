@@ -1,12 +1,7 @@
 <template>
-  <div class="register-container">
-    <h2>Register</h2>
-    <form @submit.prevent="register">
-      <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" v-model="form.username" required />
-      </div>
-
+  <div class="login-container">
+    <h2>Login</h2>
+    <form @submit.prevent="login">
       <div>
         <label for="email">Email:</label>
         <input type="email" id="email" v-model="form.email" required />
@@ -18,66 +13,69 @@
       </div>
 
       <button type="submit" :disabled="loading">
-        {{ loading ? "Registering..." : "Register" }}
+        {{ loading ? "Logging in..." : "Login" }}
       </button>
 
       <p v-if="message" :class="{ error: isError }">{{ message }}</p>
 
       <p>
-        Already have an account? 
-        <router-link to="/login">Login here</router-link>
+        Don't have an account?
+        <router-link to="/register">Register here</router-link>
       </p>
     </form>
   </div>
 </template>
-  
-  <script setup lang="ts">
-  import { ref } from 'vue';
-  import axios from 'axios';
-  import { useRouter } from 'vue-router';
 
-  const router = useRouter();
+<script setup lang="ts">
+import { ref } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
 
-  const form = ref({
-    username: '',
-    email: '',
-    password: '',
-  });
-  
-  const message = ref<string | null>(null);
-  const loading = ref(false);
-  const isError = ref(false);
+const router = useRouter();
 
-  const register = async () => {
+const form = ref({
+  email: '',
+  password: '',
+});
+
+const message = ref<string | null>(null);
+const loading = ref(false);
+const isError = ref(false);
+
+const login = async () => {
   try {
     loading.value = true;
     isError.value = false;
-    const response = await axios.post('http://localhost:8082/api/auth/register', form.value, {
+    const response = await axios.post('http://localhost:8082/api/auth/login', form.value, {
       headers: { 'Content-Type': 'application/json' }
     });
-    message.value = response.data; // Show success message
 
-    // Redirect to login after a short delay
+    // Store the token
+    localStorage.setItem('token', response.data);
+    message.value = 'Login successful! Redirecting...';
+
+    // Redirect to home after a short delay
     setTimeout(() => {
-      router.push('/login');
-    }, 1500);
+      router.push('/home');
+    }, 500);
   } catch (error: any) {
     isError.value = true;
-    if (error.response && error.response.status === 400) {
+    if (error.response && error.response.status === 401) {
+      message.value = error.response.data || 'Invalid email or password';
+    } else if (error.response && error.response.status === 400) {
       message.value = error.response.data;
     } else {
-      message.value = 'Registration failed! Please try again.';
+      message.value = 'Login failed! Please try again.';
     }
-    console.error('Registration error:', error);
+    console.error('Login error:', error);
   } finally {
     loading.value = false;
   }
 };
-
-   </script>
+</script>
 
 <style scoped>
-.register-container {
+.login-container {
   max-width: 400px;
   margin: 50px auto;
   padding: 20px;
@@ -106,7 +104,7 @@ input {
 button {
   width: 100%;
   padding: 10px;
-  background-color: #28a745;
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 4px;
@@ -120,7 +118,7 @@ button:disabled {
 }
 
 button:hover:not(:disabled) {
-  background-color: #218838;
+  background-color: #0056b3;
 }
 
 p {
