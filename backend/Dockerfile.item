@@ -1,0 +1,23 @@
+# Dockerfile для Item Service
+FROM maven:3.9-eclipse-temurin-17 AS builder
+
+WORKDIR /app
+
+# Copy all backend files
+COPY . .
+
+# Build only item-service
+RUN mvn clean package -pl item-service -DskipTests
+
+# Runtime stage
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /app
+
+# Copy built JAR from builder
+COPY --from=builder /app/item-service/target/item-service-*.jar app.jar
+
+EXPOSE 8081
+
+CMD ["java", "-jar", "app.jar"]
+

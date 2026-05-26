@@ -19,7 +19,7 @@ const router = createRouter({
 });
 
 // Navigation Guard to check for auth token
-router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+router.beforeEach((to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {
   const isAuthenticated = !!localStorage.getItem('token');
   
   if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
