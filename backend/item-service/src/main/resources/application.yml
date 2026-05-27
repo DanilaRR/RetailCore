@@ -11,3 +11,6 @@ spring:
     password: admin
 server:
   port: 8081
+
+jwt:
+  secret: owqqu4k3dG90fxNR143dFqpEy61pRGBZdfsMaKGAaC0=

@@ -7,10 +7,12 @@ spring:
     url: jdbc:postgresql://localhost:5432/site
     username: postgres
     password: admin
+  jpa:
+    hibernate:
+      ddl-auto: update
   security:
     user:
       name: admin
       password: password
 server:
   port: 8082
-

@@ -29,6 +29,9 @@ public class RegisterController {
         if (userRepository.existsByUsername(registerRequest.username())) {
             return ResponseEntity.badRequest().body("Username is already taken");
         }
+        if (userRepository.existsByEmail(registerRequest.email())) {
+            return ResponseEntity.badRequest().body("Email is already taken");
+        }
 
         // Create a new user and encode the password
         User user = new User();

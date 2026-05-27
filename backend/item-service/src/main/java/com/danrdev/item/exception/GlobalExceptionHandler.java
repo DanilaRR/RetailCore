@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -20,6 +23,16 @@ public class GlobalExceptionHandler {
                 .body("File processing failed.");
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleBadRequest(IllegalArgumentException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    @ExceptionHandler({NoSuchElementException.class, EntityNotFoundException.class})
+    public ResponseEntity<String> handleNotFound(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericException(Exception ex) {
         log.error("Unexpected error", ex);
@@ -27,7 +40,6 @@ public class GlobalExceptionHandler {
                 .body("An unexpected error occurred.");
     }
 
-    // Optional: для обработки больших файлов
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<String> handleMaxSizeException(MaxUploadSizeExceededException ex) {
         log.error("File too large", ex);

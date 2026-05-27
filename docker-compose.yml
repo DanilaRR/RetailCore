@@ -1,7 +1,5 @@
-version: '3.8'
-
 services:
-  # PostgreSQL база данных
+  # PostgreSQL database
   postgres:
     image: postgres:15-alpine
     container_name: webstore-postgres
@@ -19,7 +17,7 @@ services:
       timeout: 5s
       retries: 5
 
-  # Security Service (порт 8082)
+  # Security Service (port 8082)
   security-service:
     build:
       context: ./backend
@@ -35,7 +33,7 @@ services:
       postgres:
         condition: service_healthy
 
-  # Item Service (порт 8081)
+  # Item Service (port 8081)
   item-service:
     build:
       context: ./backend
@@ -65,4 +63,3 @@ services:
 
 volumes:
   postgres-data:
-

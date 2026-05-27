@@ -24,24 +24,19 @@ public class RequestResponseLoggingFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        // Оборачиваем response в ContentCachingResponseWrapper для захвата тела ответа
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(httpResponse);
 
-        // Логируем запрос
         logger.info("Request Method: {}, Request URI: {}", httpRequest.getMethod(), httpRequest.getRequestURI());
 
-        // Продолжаем обработку запроса
         chain.doFilter(request, responseWrapper);
 
-        // Логируем ответ
         byte[] responseBody = responseWrapper.getContentAsByteArray();
         logger.info("Response Status: {}", httpResponse.getStatus());
         logger.info("Response Body: {}", new String(responseBody));
 
-        // Завершаем обработку и отправляем оригинальный ответ
         responseWrapper.copyBodyToResponse();
     }
 

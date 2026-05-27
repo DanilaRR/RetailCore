@@ -6,6 +6,8 @@ import com.danrdev.item.model.category.response.CreateCategoryResponse;
 import com.danrdev.item.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -18,6 +20,10 @@ public class CategoryService {
     }
 
     public CreateCategoryResponse createCategory(CreateCategoryRequest request) {
+        if (request.name() == null || request.name().isBlank()) {
+            throw new IllegalArgumentException("Category name is required");
+        }
+
         if (repository.existsByName(request.name())) {
             throw new IllegalArgumentException("Category already exists");
         }
@@ -27,6 +33,14 @@ public class CategoryService {
         Category saved = repository.save(category);
 
         return toResponse(saved);
+    }
+
+    public List<CreateCategoryResponse> getAllCategories() {
+        return repository.findAll()
+                .stream()
+                .sorted(Comparator.comparing(Category::getName, String.CASE_INSENSITIVE_ORDER))
+                .map(this::toResponse)
+                .toList();
     }
 
     public void deleteCategory(Long categoryId) {

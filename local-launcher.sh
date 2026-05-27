@@ -1,73 +1,69 @@
 #!/bin/bash
 
-# Цвета
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 echo -e "${BLUE}========================================${NC}"
-echo -e "${BLUE}🚀 Webstore - Локальный запуск${NC}"
+echo -e "${BLUE}Webstore - Local Launcher${NC}"
 echo -e "${BLUE}========================================${NC}"
 echo ""
 
-# Проверка требуемых инструментов
 check_requirements() {
     local missing=0
 
-    echo -e "${YELLOW}Проверка требуемых инструментов...${NC}"
+    echo -e "${YELLOW}Checking required tools...${NC}"
 
     if ! command -v java &> /dev/null; then
-        echo -e "${RED}❌ Java не установлена${NC}"
+        echo -e "${RED}Java is not installed.${NC}"
         missing=1
     else
-        echo -e "${GREEN}✅ Java${NC}"
+        echo -e "${GREEN}Java found.${NC}"
     fi
 
     if ! command -v node &> /dev/null; then
-        echo -e "${RED}❌ Node.js не установлен${NC}"
+        echo -e "${RED}Node.js is not installed.${NC}"
         missing=1
     else
-        echo -e "${GREEN}✅ Node.js${NC}"
+        echo -e "${GREEN}Node.js found.${NC}"
     fi
 
     if ! command -v npm &> /dev/null; then
-        echo -e "${RED}❌ npm не установлен${NC}"
+        echo -e "${RED}npm is not installed.${NC}"
         missing=1
     else
-        echo -e "${GREEN}✅ npm${NC}"
+        echo -e "${GREEN}npm found.${NC}"
     fi
 
     if ! command -v docker &> /dev/null; then
-        echo -e "${YELLOW}⚠️  Docker не найден (нужен для PostgreSQL)${NC}"
+        echo -e "${YELLOW}Docker is not available. It is required for the local PostgreSQL helper.${NC}"
     else
-        echo -e "${GREEN}✅ Docker${NC}"
+        echo -e "${GREEN}Docker found.${NC}"
     fi
 
     if [ $missing -eq 1 ]; then
         echo ""
-        echo -e "${RED}Пожалуйста установите отсутствующие инструменты${NC}"
+        echo -e "${RED}Install the missing tools and try again.${NC}"
         exit 1
     fi
 
     echo ""
 }
 
-# Запуск PostgreSQL в Docker
 start_postgres() {
-    echo -e "${BLUE}🐘 Запуск PostgreSQL...${NC}"
+    echo -e "${BLUE}Starting PostgreSQL...${NC}"
 
-    # Проверим, не запущен ли уже
-    if docker ps | grep -q "webstore-postgres"; then
-        echo -e "${YELLOW}⚠️  PostgreSQL уже запущен${NC}"
+    if docker ps --format '{{.Names}}' | grep -q "^webstore-postgres$"; then
+        echo -e "${YELLOW}PostgreSQL is already running.${NC}"
         return 0
     fi
 
-    # Удалим старый контейнер если есть
-    docker rm webstore-postgres 2>/dev/null
+    docker rm webstore-postgres 2>/dev/null || true
 
-    # Запустим новый
     docker run --name webstore-postgres \
         -e POSTGRES_USER=postgres \
         -e POSTGRES_PASSWORD=admin \
@@ -75,98 +71,61 @@ start_postgres() {
         -p 5432:5432 \
         -d postgres:15-alpine
 
-    # Ждем готовности БД
-    echo -e "${YELLOW}⏳ Ожидание готовности БД...${NC}"
+    echo -e "${YELLOW}Waiting for PostgreSQL...${NC}"
     sleep 5
 
     if docker exec webstore-postgres pg_isready -U postgres > /dev/null 2>&1; then
-        echo -e "${GREEN}✅ PostgreSQL готова${NC}"
+        echo -e "${GREEN}PostgreSQL is ready.${NC}"
     else
-        echo -e "${RED}❌ PostgreSQL не готова${NC}"
+        echo -e "${RED}PostgreSQL is not ready.${NC}"
         exit 1
     fi
 }
 
 check_requirements
 
-echo -e "${YELLOW}Выберите вариант запуска:${NC}"
-echo "1) 📦 Запустить Backend (оба сервиса в одном процессе)"
-echo "2) 🎨 Запустить только Frontend"
-echo "3) 🔐 Запустить Security Service (Terminal 1)"
-echo "4) 📦 Запустить Item Service (Terminal 2)"
-echo "5) ⚡ Запустить всё (требует 3 терминала)"
-echo "6) ❌ Выход"
+echo -e "${YELLOW}Choose a launch option:${NC}"
+echo "1) Start PostgreSQL only"
+echo "2) Start frontend only"
+echo "3) Start Security Service"
+echo "4) Start Item Service"
+echo "5) Show local development commands"
+echo "6) Exit"
 echo ""
 
-read -p "Введите номер (1-6): " choice
+read -p "Enter a number (1-6): " choice
 
 case $choice in
     1)
-        echo ""
         start_postgres
-        echo ""
-        echo -e "${BLUE}🔨 Сборка Backend...${NC}"
-        cd backend
-        ./mvnw clean install -DskipTests
-        echo ""
-        echo -e "${BLUE}▶️  Запуск Backend сервисов...${NC}"
-        ./mvnw spring-boot:run
         ;;
     2)
-        echo ""
-        echo -e "${BLUE}📦 Установка npm зависимостей...${NC}"
-        cd frontend
+        cd "$ROOT_DIR/frontend" || exit 1
         npm install
-        echo ""
-        echo -e "${BLUE}▶️  Запуск Frontend (Ctrl+C для выхода)...${NC}"
         npm run dev
         ;;
     3)
-        echo ""
         start_postgres
-        echo ""
-        echo -e "${BLUE}🔐 Запуск Security Service на порту 8082...${NC}"
-        echo -e "${YELLOW}Рекомендация: откройте новый терминал для Item Service${NC}"
-        echo ""
-        cd backend/security-service
-        ../../mvnw spring-boot:run
+        cd "$ROOT_DIR" || exit 1
+        ./mvnw -f backend/pom.xml -pl security-service spring-boot:run
         ;;
     4)
-        echo ""
         start_postgres
-        echo ""
-        echo -e "${BLUE}📦 Запуск Item Service на порту 8081...${NC}"
-        echo -e "${YELLOW}Рекомендация: откройте новый терминал для Security Service${NC}"
-        echo ""
-        cd backend/item-service
-        ../../mvnw spring-boot:run
+        cd "$ROOT_DIR" || exit 1
+        ./mvnw -f backend/pom.xml -pl item-service spring-boot:run
         ;;
     5)
-        echo ""
-        start_postgres
-        echo ""
-        echo -e "${GREEN}✅ PostgreSQL запущена${NC}"
-        echo ""
-        echo -e "${YELLOW}Откройте 3 новых терминала и запустите:${NC}"
-        echo ""
-        echo -e "${BLUE}Terminal 1 - Security Service:${NC}"
-        echo "cd backend/security-service && ../../mvnw spring-boot:run"
-        echo ""
-        echo -e "${BLUE}Terminal 2 - Item Service:${NC}"
-        echo "cd backend/item-service && ../../mvnw spring-boot:run"
-        echo ""
-        echo -e "${BLUE}Terminal 3 - Frontend:${NC}"
-        echo "cd frontend && npm install && npm run dev"
-        echo ""
-        echo "После запуска откройте в браузере: http://localhost:5173"
+        echo "Terminal 1: make db-start"
+        echo "Terminal 2: make security-dev"
+        echo "Terminal 3: make items-dev"
+        echo "Terminal 4: make frontend-dev"
+        echo "Open http://localhost:5173 after the frontend starts."
         ;;
     6)
-        echo "Выход"
         exit 0
         ;;
     *)
-        echo -e "${RED}❌ Неверный выбор${NC}"
+        echo -e "${RED}Invalid choice.${NC}"
         exit 1
         ;;
 esac
-

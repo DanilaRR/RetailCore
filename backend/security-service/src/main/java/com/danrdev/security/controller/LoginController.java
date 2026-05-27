@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +34,16 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         try {
+            if (loginRequest.email() == null || loginRequest.email().isBlank()) {
+                return ResponseEntity.badRequest().body("Email is required");
+            }
+            if (loginRequest.password() == null || loginRequest.password().isBlank()) {
+                return ResponseEntity.badRequest().body("Password is required");
+            }
+            if (!userRepository.existsByEmail(loginRequest.email())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No account found for this email");
+            }
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password())
             );
@@ -43,10 +54,13 @@ public class LoginController {
             return ResponseEntity.ok(token);
 
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email/username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Password is incorrect for this email");
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed: " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Login failed on server: " + e.getClass().getSimpleName());
         }
     }
 }

@@ -32,8 +32,13 @@ public class ItemService {
     }
 
     public SaveItemResponse saveItem(SaveItemRequest request) throws IOException {
+        if (request.price() == null || request.price().signum() <= 0) {
+            throw new IllegalArgumentException("Price must be greater than zero");
+        }
+
         Item item = new Item();
         item.setName(request.name());
+        item.setPrice(request.price());
 
         String categoryName = request.categoryName();
         Category category = (categoryName != null && !categoryName.isBlank())
@@ -45,7 +50,7 @@ public class ItemService {
         item.setCategory(category);
         itemRepository.save(item);
 
-        return new SaveItemResponse(item.getId(), item.getName(), category.getName());
+        return new SaveItemResponse(item.getId(), item.getName(), item.getPrice(), category.getName());
     }
 
     @Transactional
@@ -79,13 +84,22 @@ public class ItemService {
 
     public Optional<ViewItemResponse> getItemById(Long id) {
         return itemRepository.findById(id)
-                .map(item -> new ViewItemResponse(item.getId(), item.getName()));
+                .map(this::toViewResponse);
     }
 
     public List<ViewItemResponse> getAllItems() {
         return itemRepository.findAll()
                 .stream()
-                .map(item -> new ViewItemResponse(item.getId(), item.getName()))
+                .map(this::toViewResponse)
                 .collect(Collectors.toList());
+    }
+
+    private ViewItemResponse toViewResponse(Item item) {
+        return new ViewItemResponse(
+                item.getId(),
+                item.getName(),
+                item.getPrice(),
+                item.getCategory().getName()
+        );
     }
 }

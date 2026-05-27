@@ -1,4 +1,4 @@
-# Dockerfile для Security Service
+# Dockerfile for Security Service
 FROM maven:3.9-eclipse-temurin-17 AS builder
 
 WORKDIR /app
@@ -20,4 +20,3 @@ COPY --from=builder /app/security-service/target/security-service-*.jar app.jar
 EXPOSE 8082
 
 CMD ["java", "-jar", "app.jar"]
-

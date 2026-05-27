@@ -42,6 +42,24 @@ const message = ref<string | null>(null);
 const loading = ref(false);
 const isError = ref(false);
 
+const getErrorReason = (error: any): string => {
+  if (error.response) {
+    const status = error.response.status;
+    const data = error.response.data;
+    const reason = typeof data === 'string'
+      ? data
+      : data?.message || data?.error || JSON.stringify(data);
+
+    return `Login failed (${status}): ${reason || 'No reason returned by server'}`;
+  }
+
+  if (error.request) {
+    return 'Login failed: auth service did not respond. Check that security-service is running on port 8082.';
+  }
+
+  return `Login failed: ${error.message || 'Unknown client error'}`;
+};
+
 const login = async () => {
   try {
     loading.value = true;
@@ -56,17 +74,11 @@ const login = async () => {
 
     // Redirect to home after a short delay
     setTimeout(() => {
-      router.push('/home');
+      router.push('/items');
     }, 500);
   } catch (error: any) {
     isError.value = true;
-    if (error.response && error.response.status === 401) {
-      message.value = error.response.data || 'Invalid email or password';
-    } else if (error.response && error.response.status === 400) {
-      message.value = error.response.data;
-    } else {
-      message.value = 'Login failed! Please try again.';
-    }
+    message.value = getErrorReason(error);
     console.error('Login error:', error);
   } finally {
     loading.value = false;
@@ -140,4 +152,3 @@ a:hover {
   text-decoration: underline;
 }
 </style>
-
