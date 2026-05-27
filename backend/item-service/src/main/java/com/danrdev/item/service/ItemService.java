@@ -1,20 +1,25 @@
 package com.danrdev.item.service;
 
+import com.danrdev.item.exception.GlobalExceptionHandler;
 import com.danrdev.item.model.category.Category;
+import com.danrdev.item.model.category.request.SaveCategoryRequest;
+import com.danrdev.item.model.category.response.CreateCategoryResponse;
 import com.danrdev.item.model.item.Item;
+import com.danrdev.item.model.item.request.DeleteItemRequest;
 import com.danrdev.item.model.item.request.SaveItemRequest;
 import com.danrdev.item.model.item.request.UpdateItemRequest;
 import com.danrdev.item.model.item.response.DeleteItemResponse;
 import com.danrdev.item.model.item.response.SaveItemResponse;
+import com.danrdev.item.model.item.response.UpdateItemResponse;
 import com.danrdev.item.model.item.response.ViewItemResponse;
 import com.danrdev.item.repository.CategoryRepository;
 import com.danrdev.item.repository.ItemRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,14 +27,11 @@ import java.util.stream.Collectors;
 @Service
 public class ItemService {
 
-    private final ItemRepository itemRepository;
-    private final CategoryRepository categoryRepository;
+    @Autowired
+    private ItemRepository itemRepository;
 
     @Autowired
-    public ItemService(ItemRepository itemRepository, CategoryRepository categoryRepository) {
-        this.itemRepository = itemRepository;
-        this.categoryRepository = categoryRepository;
-    }
+    private CategoryRepository categoryRepository;
 
     public SaveItemResponse saveItem(SaveItemRequest request) throws IOException {
         if (request.price() == null || request.price().signum() <= 0) {
@@ -41,35 +43,35 @@ public class ItemService {
         item.setPrice(request.price());
 
         String categoryName = request.categoryName();
-        Category category = (categoryName != null && !categoryName.isBlank())
-                ? categoryRepository.findByName(categoryName)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found: " + categoryName))
-                : categoryRepository.findByName("Other")
-                .orElseThrow(() -> new IllegalStateException("Default category 'Other' not found"));
+        Optional<Category> categoryOptional = categoryRepository.findByName(categoryName);
+        if (categoryOptional.isEmpty()) {
+            throw new NoSuchElementException("Category not found: " + categoryName);
+        }
+        item.setCategory(categoryOptional.get());
 
-        item.setCategory(category);
-        itemRepository.save(item);
-
-        return new SaveItemResponse(item.getId(), item.getName(), item.getPrice(), category.getName());
+        Item savedItem = itemRepository.save(item);
+        return new SaveItemResponse(savedItem.getId(), savedItem.getName());
     }
 
     @Transactional
     public void updateItem(Long itemId, UpdateItemRequest request) {
-        Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new EntityNotFoundException("Item not found"));
+        Optional<Item> optional = itemRepository.findById(itemId);
+        if (optional.isEmpty()) {
+            throw new RuntimeException("Item not found with ID: " + itemId);
+        }
 
-        if (request.newName() != null) {
-            item.setName(request.newName());
+        Item item = optional.get();
+        item.setName(request.name());
+        item.setPrice(request.price());
+
+        String categoryName = request.categoryName();
+        Optional<Category> categoryOptional = categoryRepository.findByName(categoryName);
+        if (categoryOptional.isEmpty()) {
+            throw new NoSuchElementException("Category not found: " + categoryName);
         }
-        if (request.newPrice() != null) {
-            item.setPrice(request.newPrice());
-        }
-        if (request.newCategoryId() != null
-                && !request.newCategoryId().equals(item.getCategory().getId())) {
-            Category category = categoryRepository.findById(request.newCategoryId())
-                    .orElseThrow(() -> new EntityNotFoundException("Category not found"));
-            item.setCategory(category);
-        }
+        item.setCategory(categoryOptional.get());
+
+        itemRepository.save(item);
     }
 
     public DeleteItemResponse deleteItem(Long id) {
