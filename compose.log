@@ -1,0 +1,414 @@
+Compose can now delegate builds to bake for better performance.
+ To do so, set COMPOSE_BAKE=true.
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [item-service internal] load build definition from Dockerfile.item
+#1 transferring dockerfile: 461B done
+#1 DONE 0.0s
+
+#2 [security-service internal] load build definition from Dockerfile.security
+#2 transferring dockerfile: 485B done
+#2 DONE 0.0s
+
+#3 [security-service internal] load metadata for docker.io/library/maven:3.9-eclipse-temurin-17
+#3 DONE 0.9s
+
+#4 [security-service internal] load metadata for docker.io/library/eclipse-temurin:17-jre-alpine
+#4 DONE 0.9s
+
+#5 [security-service internal] load .dockerignore
+#5 transferring context: 125B done
+#5 DONE 0.0s
+
+#6 [item-service internal] load .dockerignore
+#6 transferring context: 125B done
+#6 DONE 0.0s
+
+#7 [security-service stage-1 1/3] FROM docker.io/library/eclipse-temurin:17-jre-alpine@sha256:b0ae54a36f82e04dc6c45e40ca5c55762e20b9a0858ee457faf557d440a9b571
+#7 resolve docker.io/library/eclipse-temurin:17-jre-alpine@sha256:b0ae54a36f82e04dc6c45e40ca5c55762e20b9a0858ee457faf557d440a9b571 0.0s done
+#7 DONE 0.0s
+
+#8 [security-service builder 1/4] FROM docker.io/library/maven:3.9-eclipse-temurin-17@sha256:e8ef73dbd33b69fe497fd96b3bbbd85aff84ac4c564a5784ab02ad941b32c12b
+#8 resolve docker.io/library/maven:3.9-eclipse-temurin-17@sha256:e8ef73dbd33b69fe497fd96b3bbbd85aff84ac4c564a5784ab02ad941b32c12b 0.0s done
+#8 DONE 0.1s
+
+#9 [item-service internal] load build context
+#9 transferring context: 15.04kB 0.0s done
+#9 DONE 0.0s
+
+#10 [security-service internal] load build context
+#10 transferring context: 15.04kB 0.0s done
+#10 DONE 0.0s
+
+#11 [item-service builder 4/4] RUN mvn clean package -pl item-service -DskipTests
+#11 CACHED
+
+#12 [item-service builder 3/4] COPY . .
+#12 CACHED
+
+#13 [item-service stage-1 3/3] COPY --from=builder /app/item-service/target/item-service-*.jar app.jar
+#13 CACHED
+
+#14 [security-service builder 3/4] COPY . .
+#14 CACHED
+
+#15 [security-service builder 2/4] WORKDIR /app
+#15 CACHED
+
+#16 [security-service stage-1 2/3] WORKDIR /app
+#16 CACHED
+
+#17 [security-service builder 4/4] RUN mvn clean package -pl security-service -DskipTests
+#17 CACHED
+
+#18 [security-service stage-1 3/3] COPY --from=builder /app/security-service/target/security-service-*.jar app.jar
+#18 CACHED
+
+#19 [item-service] exporting to image
+#19 exporting layers done
+#19 exporting manifest sha256:03a540a1857512136843215c1e272fccf23febfda4229a832b1b61f342db5c94 done
+#19 exporting config sha256:673ab4f3983622862e892146c312beeaadc165f978084ebfdb976c4a6302f56b done
+#19 exporting attestation manifest sha256:615e0e45d5a9dcbd722e0173a9bdca84f8a474783046d7fe77511e523354bd1a
+#19 exporting attestation manifest sha256:615e0e45d5a9dcbd722e0173a9bdca84f8a474783046d7fe77511e523354bd1a 0.1s done
+#19 exporting manifest list sha256:ea9aa06ba117b6027f285408d922e4b991afbadada1ffa8aebd4f4f8f399acf0
+#19 exporting manifest list sha256:ea9aa06ba117b6027f285408d922e4b991afbadada1ffa8aebd4f4f8f399acf0 0.1s done
+#19 naming to docker.io/library/webstore-item-service:latest 0.0s done
+#19 unpacking to docker.io/library/webstore-item-service:latest 0.0s done
+#19 DONE 0.3s
+
+#20 [security-service] exporting to image
+#20 exporting layers done
+#20 exporting manifest sha256:5292b5faa874a1eeebccd042337cc0ae655939648b908d507f39a7479c3d46c7 done
+#20 exporting config sha256:a2f4f23de10aed68e288d84ef9d8e202c3dbb4d5efddc6b3dffac54999c4a7d8 done
+#20 exporting attestation manifest sha256:2f2aff6105c0edfa850d33ebea98f537428063a9c6fc75ff41492d41bc2f21ed 0.1s done
+#20 exporting manifest list sha256:3d8195f31df0c69600d9749903770b62ef009ec2bd44cd1b0f49b588e16e4d61 0.0s done
+#20 naming to docker.io/library/webstore-security-service:latest done
+#20 unpacking to docker.io/library/webstore-security-service:latest 0.0s done
+#20 DONE 0.3s
+
+#21 [item-service] resolving provenance for metadata file
+#21 DONE 0.0s
+
+#22 [security-service] resolving provenance for metadata file
+#22 DONE 0.0s
+
+#23 [frontend internal] load build definition from Dockerfile
+#23 transferring dockerfile: 485B done
+#23 DONE 0.0s
+
+#24 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#24 DONE 0.7s
+
+#25 [frontend internal] load .dockerignore
+#25 transferring context: 103B done
+#25 DONE 0.0s
+
+#26 [frontend 1/7] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#26 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.0s done
+#26 DONE 0.0s
+
+#27 [frontend internal] load build context
+#27 transferring context: 16.49kB done
+#27 DONE 0.0s
+
+#28 [frontend 2/7] WORKDIR /app
+#28 CACHED
+
+#29 [frontend 3/7] COPY package*.json ./
+#29 CACHED
+
+#30 [frontend 4/7] RUN npm install
+#30 2.920 
+#30 2.920 added 87 packages, and audited 88 packages in 3s
+#30 2.920 
+#30 2.920 12 packages are looking for funding
+#30 2.920   run `npm fund` for details
+#30 2.945 
+#30 2.945 9 vulnerabilities (3 moderate, 5 high, 1 critical)
+#30 2.945 
+#30 2.945 To address all issues, run:
+#30 2.945   npm audit fix
+#30 2.945 
+#30 2.945 Run `npm audit` for details.
+#30 2.946 npm notice
+#30 2.946 npm notice New major version of npm available! 10.8.2 -> 11.17.0
+#30 2.946 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.17.0
+#30 2.946 npm notice To update run: npm install -g npm@11.17.0
+#30 2.946 npm notice
+#30 DONE 3.4s
+
+#31 [frontend 5/7] COPY . .
+#31 DONE 0.1s
+
+#32 [frontend 6/7] RUN VITE_API_BASE_URL=http://item-service:8081 npm run build
+#32 0.312 
+#32 0.312 > frontend@0.0.0 build
+#32 0.312 > vue-tsc -b && vite build
+#32 0.312 
+#32 2.619 vite v6.1.1 building for production...
+#32 2.703 transforming...
+#32 3.595 ✓ 108 modules transformed.
+#32 3.713 rendering chunks...
+#32 3.718 computing gzip size...
+#32 3.726 dist/index.html                   0.46 kB │ gzip:  0.30 kB
+#32 3.726 dist/assets/index-D0NoWfCW.css   15.08 kB │ gzip:  2.88 kB
+#32 3.726 dist/assets/index-q7C0AVQ6.js   179.19 kB │ gzip: 65.52 kB
+#32 3.727 ✓ built in 1.09s
+#32 DONE 3.8s
+
+#33 [frontend 7/7] RUN npm install -g serve
+#33 3.193 
+#33 3.193 added 85 packages in 3s
+#33 3.193 
+#33 3.193 26 packages are looking for funding
+#33 3.193   run `npm fund` for details
+#33 DONE 3.3s
+
+#34 [frontend] exporting to image
+#34 exporting layers
+#34 exporting layers 2.8s done
+#34 exporting manifest sha256:8f392d19c148ac25b82a9d2a9cc84adec971b989d100885c743e4325f92f5a19 0.0s done
+#34 exporting config sha256:bcb8e6c546e57141f23dbe5da90e33cdc92c9998d1a0f62f1d940c900cf645af 0.0s done
+#34 exporting attestation manifest sha256:ad5987698a0fca34e9e8649fc3f4b0cc9483e1c16ca019f52c46e380478d347b 0.0s done
+#34 exporting manifest list sha256:4fa1a3aea51f5045383f3c3cecd1f23496813a211511ab31d49b1cbcb1824d14 0.0s done
+#34 naming to docker.io/library/webstore-frontend:latest
+#34 naming to docker.io/library/webstore-frontend:latest done
+#34 unpacking to docker.io/library/webstore-frontend:latest
+#34 unpacking to docker.io/library/webstore-frontend:latest 0.8s done
+#34 DONE 3.8s
+
+#35 [frontend] resolving provenance for metadata file
+#35 DONE 0.0s
+ frontend  Built
+ item-service  Built
+ security-service  Built
+ Network webstore_default  Creating
+ Network webstore_default  Created
+ Container webstore-postgres  Creating
+ Container webstore-postgres  Created
+ Container webstore-item-service  Creating
+ Container webstore-security-service  Creating
+ Container webstore-security-service  Created
+ Container webstore-item-service  Created
+ Container rettailcore-frontend  Creating
+ Container rettailcore-frontend  Created
+Attaching to rettailcore-frontend, webstore-item-service, webstore-postgres, webstore-security-service
+webstore-postgres          | 
+webstore-postgres          | PostgreSQL Database directory appears to contain a database; Skipping initialization
+webstore-postgres          | 
+webstore-postgres          | 2026-06-17 13:53:32.404 UTC [1] LOG:  starting PostgreSQL 15.18 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit
+webstore-postgres          | 2026-06-17 13:53:32.404 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+webstore-postgres          | 2026-06-17 13:53:32.404 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+webstore-postgres          | 2026-06-17 13:53:32.410 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+webstore-postgres          | 2026-06-17 13:53:32.418 UTC [28] LOG:  database system was shut down at 2026-06-17 13:53:04 UTC
+webstore-postgres          | 2026-06-17 13:53:32.425 UTC [1] LOG:  database system is ready to accept connections
+rettailcore-frontend       |  INFO  Accepting connections at http://localhost:5173
+webstore-item-service      |   .   ____          _            __ _ _
+webstore-item-service      |  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+webstore-item-service      | ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+webstore-item-service      |  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+webstore-item-service      |   '  |____| .__|_| |_|_| |_\__, | / / / /
+webstore-item-service      |  =========|_|==============|___/=/_/_/_/
+webstore-item-service      | 
+webstore-item-service      |  :: Spring Boot ::                (v3.3.0)
+webstore-item-service      | 
+webstore-security-service  |   .   ____          _            __ _ _
+webstore-security-service  |  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+webstore-security-service  | ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+webstore-security-service  |  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+webstore-security-service  |   '  |____| .__|_| |_|_| |_\__, | / / / /
+webstore-security-service  |  =========|_|==============|___/=/_/_/_/
+webstore-security-service  | 
+webstore-security-service  |  :: Spring Boot ::                (v3.3.0)
+webstore-security-service  | 
+webstore-item-service      | 2026-06-17T13:53:44.025Z  INFO 1 --- [item-service] [           main] c.danrdev.item.ItemServiceApplication    : Starting ItemServiceApplication v0.0.1-SNAPSHOT using Java 17.0.19 with PID 1 (/app/app.jar started by root in /app)
+webstore-item-service      | 2026-06-17T13:53:44.029Z  INFO 1 --- [item-service] [           main] c.danrdev.item.ItemServiceApplication    : No active profile set, falling back to 1 default profile: "default"
+webstore-security-service  | 2026-06-17T13:53:44.097Z  INFO 1 --- [           main] c.d.security.SecurityServiceApplication  : Starting SecurityServiceApplication v0.0.1-SNAPSHOT using Java 17.0.19 with PID 1 (/app/app.jar started by root in /app)
+webstore-security-service  | 2026-06-17T13:53:44.107Z  INFO 1 --- [           main] c.d.security.SecurityServiceApplication  : No active profile set, falling back to 1 default profile: "default"
+webstore-item-service      | 2026-06-17T13:53:44.847Z  INFO 1 --- [item-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+webstore-security-service  | 2026-06-17T13:53:44.865Z  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+webstore-item-service      | 2026-06-17T13:53:44.922Z  INFO 1 --- [item-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 62 ms. Found 2 JPA repository interfaces.
+webstore-security-service  | 2026-06-17T13:53:44.939Z  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 57 ms. Found 1 JPA repository interface.
+webstore-security-service  | 2026-06-17T13:53:45.482Z  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+webstore-security-service  | 2026-06-17T13:53:45.493Z  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+webstore-security-service  | 2026-06-17T13:53:45.493Z  INFO 1 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.24]
+webstore-security-service  | 2026-06-17T13:53:45.532Z  INFO 1 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+webstore-security-service  | 2026-06-17T13:53:45.534Z  INFO 1 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1336 ms
+webstore-item-service      | 2026-06-17T13:53:45.551Z  INFO 1 --- [item-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+webstore-item-service      | 2026-06-17T13:53:45.570Z  INFO 1 --- [item-service] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+webstore-item-service      | 2026-06-17T13:53:45.570Z  INFO 1 --- [item-service] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.24]
+webstore-item-service      | 2026-06-17T13:53:45.616Z  INFO 1 --- [item-service] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+webstore-item-service      | 2026-06-17T13:53:45.617Z  INFO 1 --- [item-service] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1487 ms
+webstore-security-service  | 2026-06-17T13:53:45.700Z  INFO 1 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+webstore-security-service  | 2026-06-17T13:53:45.769Z  INFO 1 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+webstore-security-service  | 2026-06-17T13:53:45.814Z  INFO 1 --- [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+webstore-item-service      | 2026-06-17T13:53:45.836Z  INFO 1 --- [item-service] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+webstore-item-service      | 2026-06-17T13:53:45.887Z  INFO 1 --- [item-service] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+webstore-item-service      | 2026-06-17T13:53:45.920Z  INFO 1 --- [item-service] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+webstore-security-service  | 2026-06-17T13:53:46.135Z  INFO 1 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+webstore-security-service  | 2026-06-17T13:53:46.177Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+webstore-item-service      | 2026-06-17T13:53:46.306Z  INFO 1 --- [item-service] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+webstore-item-service      | 2026-06-17T13:53:46.332Z  INFO 1 --- [item-service] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+webstore-security-service  | 2026-06-17T13:53:46.364Z  INFO 1 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3ea48c37
+webstore-security-service  | 2026-06-17T13:53:46.366Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+webstore-item-service      | 2026-06-17T13:53:46.518Z  INFO 1 --- [item-service] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@322b09da
+webstore-item-service      | 2026-06-17T13:53:46.520Z  INFO 1 --- [item-service] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+webstore-security-service  | 2026-06-17T13:53:47.232Z  INFO 1 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+webstore-security-service  | 2026-06-17T13:53:47.268Z  INFO 1 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+webstore-item-service      | 2026-06-17T13:53:47.455Z  INFO 1 --- [item-service] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+webstore-item-service      | 2026-06-17T13:53:47.540Z  INFO 1 --- [item-service] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+webstore-security-service  | 2026-06-17T13:53:47.588Z  INFO 1 --- [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+webstore-security-service  | 2026-06-17T13:53:47.611Z  WARN 1 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+webstore-security-service  | 2026-06-17T13:53:47.905Z  INFO 1 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4d682397, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@444ebefd, org.springframework.security.web.context.SecurityContextHolderFilter@20706e70, org.springframework.security.web.header.HeaderWriterFilter@22a22f1, org.springframework.web.filter.CorsFilter@2ecf4b3e, org.springframework.security.web.authentication.logout.LogoutFilter@1f251bf1, com.danrdev.security.jwt.JwtAuthenticationFilter@f252762, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@57283fac, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@45494046, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5f1c406e, org.springframework.security.web.session.SessionManagementFilter@10abd94f, org.springframework.security.web.access.ExceptionTranslationFilter@3d8e1fa6, org.springframework.security.web.access.intercept.AuthorizationFilter@2bf45b7c]
+webstore-item-service      | 2026-06-17T13:53:47.977Z  WARN 1 --- [item-service] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+webstore-item-service      | 2026-06-17T13:53:48.007Z  WARN 1 --- [item-service] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+webstore-item-service      | 
+webstore-item-service      | Using generated security password: aaf1d004-c5e0-4491-aa3d-3494518f0c08
+webstore-item-service      | 
+webstore-item-service      | This generated password is for development use only. Your security configuration must be updated before running your application in production.
+webstore-item-service      | 
+webstore-item-service      | 2026-06-17T13:53:48.022Z  INFO 1 --- [item-service] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+webstore-item-service      | 2026-06-17T13:53:48.129Z  INFO 1 --- [item-service] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2fca9fae, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1104ad6a, org.springframework.security.web.context.SecurityContextHolderFilter@103033fe, org.springframework.security.web.header.HeaderWriterFilter@4505015b, org.springframework.web.filter.CorsFilter@54d2887a, org.springframework.security.web.authentication.logout.LogoutFilter@60739eca, com.danrdev.item.config.JwtAuthenticationFilter@3f81621c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@38f569d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2e27325d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@73e63b4d, org.springframework.security.web.session.SessionManagementFilter@52bcfd10, org.springframework.security.web.access.ExceptionTranslationFilter@6329a5b9, org.springframework.security.web.access.intercept.AuthorizationFilter@62cb977a]
+webstore-security-service  | 2026-06-17T13:53:48.189Z  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+webstore-security-service  | 2026-06-17T13:53:48.201Z  INFO 1 --- [           main] c.d.security.SecurityServiceApplication  : Started SecurityServiceApplication in 4.671 seconds (process running for 5.127)
+webstore-item-service      | 2026-06-17T13:53:48.473Z  INFO 1 --- [item-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+webstore-item-service      | 2026-06-17T13:53:48.480Z  INFO 1 --- [item-service] [           main] c.danrdev.item.ItemServiceApplication    : Started ItemServiceApplication in 4.997 seconds (process running for 5.431)
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:18 PM 172.20.0.1 GET /
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:18 PM 172.20.0.1 Returned 200 in 14 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:18 PM 172.20.0.1 GET /assets/index-q7C0AVQ6.js
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:18 PM 172.20.0.1 Returned 200 in 4 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:18 PM 172.20.0.1 GET /assets/index-D0NoWfCW.css
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:18 PM 172.20.0.1 Returned 200 in 2 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:18 PM 172.20.0.1 GET /vite.svg
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:18 PM 172.20.0.1 Returned 200 in 2 ms
+webstore-security-service  | 2026-06-17T13:54:22.060Z  INFO 1 --- [nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+webstore-security-service  | 2026-06-17T13:54:22.060Z  INFO 1 --- [nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+webstore-security-service  | 2026-06-17T13:54:22.061Z  INFO 1 --- [nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:22 PM 172.20.0.1 GET /vite.svg
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:22 PM 172.20.0.1 Returned 304 in 1 ms
+webstore-item-service      | 2026-06-17T13:54:22.994Z  INFO 1 --- [item-service] [nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+webstore-item-service      | 2026-06-17T13:54:22.995Z  INFO 1 --- [item-service] [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+webstore-item-service      | 2026-06-17T13:54:22.996Z  INFO 1 --- [item-service] [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+webstore-item-service      | 2026-06-17T13:54:23.132Z  INFO 1 --- [item-service] [nio-8081-exec-2] c.d.i.c.RequestResponseLoggingFilter     : Request Method: GET, Request URI: /api/categories
+webstore-item-service      | 2026-06-17T13:54:23.216Z  INFO 1 --- [item-service] [nio-8081-exec-2] c.d.i.c.RequestResponseLoggingFilter     : Response Status: 200
+webstore-item-service      | 2026-06-17T13:54:23.216Z  INFO 1 --- [item-service] [nio-8081-exec-2] c.d.i.c.RequestResponseLoggingFilter     : Response Body: [{"id":2,"name":"Books"},{"id":1,"name":"Other"}]
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:24 PM 172.20.0.1 GET /vite.svg
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:24 PM 172.20.0.1 Returned 304 in 2 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:28 PM 172.20.0.1 GET /category/2
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:28 PM 172.20.0.1 Returned 200 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:28 PM 172.20.0.1 GET /assets/index-q7C0AVQ6.js
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:28 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:28 PM 172.20.0.1 GET /assets/index-D0NoWfCW.css
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:28 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:28 PM 172.20.0.1 GET /vite.svg
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:28 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:48 PM 172.20.0.1 GET /category/2
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:48 PM 172.20.0.1 Returned 304 in 2 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:48 PM 172.20.0.1 GET /assets/index-D0NoWfCW.css
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:48 PM 172.20.0.1 GET /assets/index-q7C0AVQ6.js
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:48 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:48 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:48 PM 172.20.0.1 GET /vite.svg
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:48 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:49 PM 172.20.0.1 GET /category/2
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:49 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:49 PM 172.20.0.1 GET /assets/index-D0NoWfCW.css
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:49 PM 172.20.0.1 GET /assets/index-q7C0AVQ6.js
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:49 PM 172.20.0.1 Returned 304 in 0 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:49 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:49 PM 172.20.0.1 GET /vite.svg
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:49 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:49 PM 172.20.0.1 GET /category/2
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:49 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:49 PM 172.20.0.1 GET /assets/index-D0NoWfCW.css
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:49 PM 172.20.0.1 GET /assets/index-q7C0AVQ6.js
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:49 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:49 PM 172.20.0.1 Returned 304 in 2 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:49 PM 172.20.0.1 GET /vite.svg
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:49 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:52 PM 172.20.0.1 GET /category/1
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:52 PM 172.20.0.1 Returned 200 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:52 PM 172.20.0.1 GET /assets/index-D0NoWfCW.css
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:52 PM 172.20.0.1 GET /assets/index-q7C0AVQ6.js
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:52 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:52 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:52 PM 172.20.0.1 GET /vite.svg
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:52 PM 172.20.0.1 Returned 304 in 0 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:54 PM 172.20.0.1 GET /vite.svg
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:54 PM 172.20.0.1 Returned 304 in 1 ms
+webstore-item-service      | 2026-06-17T13:54:54.713Z  INFO 1 --- [item-service] [nio-8081-exec-4] c.d.i.c.RequestResponseLoggingFilter     : Request Method: GET, Request URI: /api/categories
+webstore-item-service      | 2026-06-17T13:54:54.717Z  INFO 1 --- [item-service] [nio-8081-exec-4] c.d.i.c.RequestResponseLoggingFilter     : Response Status: 200
+webstore-item-service      | 2026-06-17T13:54:54.717Z  INFO 1 --- [item-service] [nio-8081-exec-4] c.d.i.c.RequestResponseLoggingFilter     : Response Body: [{"id":2,"name":"Books"},{"id":1,"name":"Other"}]
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:55 PM 172.20.0.1 GET /vite.svg
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:55 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:57 PM 172.20.0.1 GET /category/1
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:57 PM 172.20.0.1 Returned 304 in 0 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:57 PM 172.20.0.1 GET /assets/index-D0NoWfCW.css
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:57 PM 172.20.0.1 GET /assets/index-q7C0AVQ6.js
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:57 PM 172.20.0.1 Returned 304 in 0 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:57 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:57 PM 172.20.0.1 GET /vite.svg
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:57 PM 172.20.0.1 Returned 304 in 0 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:58 PM 172.20.0.1 GET /vite.svg
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:58 PM 172.20.0.1 Returned 304 in 2 ms
+webstore-item-service      | 2026-06-17T13:54:58.075Z  INFO 1 --- [item-service] [nio-8081-exec-5] c.d.i.c.RequestResponseLoggingFilter     : Request Method: GET, Request URI: /api/categories
+webstore-item-service      | 2026-06-17T13:54:58.081Z  INFO 1 --- [item-service] [nio-8081-exec-5] c.d.i.c.RequestResponseLoggingFilter     : Response Status: 200
+webstore-item-service      | 2026-06-17T13:54:58.082Z  INFO 1 --- [item-service] [nio-8081-exec-5] c.d.i.c.RequestResponseLoggingFilter     : Response Body: [{"id":2,"name":"Books"},{"id":1,"name":"Other"}]
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:58 PM 172.20.0.1 GET /categories
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:58 PM 172.20.0.1 Returned 200 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:58 PM 172.20.0.1 GET /assets/index-D0NoWfCW.css
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:58 PM 172.20.0.1 GET /assets/index-q7C0AVQ6.js
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:58 PM 172.20.0.1 Returned 304 in 0 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:58 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:58 PM 172.20.0.1 GET /vite.svg
+webstore-item-service      | 2026-06-17T13:54:58.684Z  INFO 1 --- [item-service] [nio-8081-exec-6] c.d.i.c.RequestResponseLoggingFilter     : Request Method: GET, Request URI: /api/categories
+rettailcore-frontend       |  HTTP  6/17/2026 1:54:58 PM 172.20.0.1 Returned 304 in 2 ms
+webstore-item-service      | 2026-06-17T13:54:58.688Z  INFO 1 --- [item-service] [nio-8081-exec-6] c.d.i.c.RequestResponseLoggingFilter     : Response Status: 200
+webstore-item-service      | 2026-06-17T13:54:58.688Z  INFO 1 --- [item-service] [nio-8081-exec-6] c.d.i.c.RequestResponseLoggingFilter     : Response Body: [{"id":2,"name":"Books"},{"id":1,"name":"Other"}]
+rettailcore-frontend       |  HTTP  6/17/2026 1:55:20 PM 172.20.0.1 GET /categories
+rettailcore-frontend       |  HTTP  6/17/2026 1:55:20 PM 172.20.0.1 Returned 304 in 0 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:55:20 PM 172.20.0.1 GET /assets/index-q7C0AVQ6.js
+rettailcore-frontend       |  HTTP  6/17/2026 1:55:20 PM 172.20.0.1 GET /assets/index-D0NoWfCW.css
+rettailcore-frontend       |  HTTP  6/17/2026 1:55:20 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:55:20 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 1:55:20 PM 172.20.0.1 GET /vite.svg
+rettailcore-frontend       |  HTTP  6/17/2026 1:55:20 PM 172.20.0.1 Returned 304 in 1 ms
+webstore-item-service      | 2026-06-17T13:55:20.272Z  INFO 1 --- [item-service] [nio-8081-exec-8] c.d.i.c.RequestResponseLoggingFilter     : Request Method: GET, Request URI: /api/categories
+webstore-item-service      | 2026-06-17T13:55:20.278Z  INFO 1 --- [item-service] [nio-8081-exec-8] c.d.i.c.RequestResponseLoggingFilter     : Response Status: 200
+webstore-item-service      | 2026-06-17T13:55:20.278Z  INFO 1 --- [item-service] [nio-8081-exec-8] c.d.i.c.RequestResponseLoggingFilter     : Response Body: [{"id":2,"name":"Books"},{"id":1,"name":"Other"}]
+webstore-postgres          | 2026-06-17 13:58:32.505 UTC [26] LOG:  checkpoint starting: time
+webstore-postgres          | 2026-06-17 13:58:32.746 UTC [26] LOG:  checkpoint complete: wrote 5 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.211 s, sync=0.010 s, total=0.241 s; sync files=4, longest=0.006 s, average=0.003 s; distance=1 kB, estimate=1 kB
+rettailcore-frontend       |  HTTP  6/17/2026 2:05:02 PM 172.20.0.1 GET /category/2
+rettailcore-frontend       |  HTTP  6/17/2026 2:05:02 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 2:05:02 PM 172.20.0.1 GET /assets/index-q7C0AVQ6.js
+rettailcore-frontend       |  HTTP  6/17/2026 2:05:02 PM 172.20.0.1 GET /assets/index-D0NoWfCW.css
+rettailcore-frontend       |  HTTP  6/17/2026 2:05:02 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 2:05:02 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       |  HTTP  6/17/2026 2:05:02 PM 172.20.0.1 GET /vite.svg
+rettailcore-frontend       |  HTTP  6/17/2026 2:05:02 PM 172.20.0.1 Returned 304 in 0 ms
+webstore-item-service      | 2026-06-17T14:05:12.838Z  INFO 1 --- [item-service] [nio-8081-exec-1] c.d.i.c.RequestResponseLoggingFilter     : Request Method: GET, Request URI: /api/categories
+webstore-item-service      | 2026-06-17T14:05:12.843Z  INFO 1 --- [item-service] [nio-8081-exec-1] c.d.i.c.RequestResponseLoggingFilter     : Response Status: 200
+webstore-item-service      | 2026-06-17T14:05:12.843Z  INFO 1 --- [item-service] [nio-8081-exec-1] c.d.i.c.RequestResponseLoggingFilter     : Response Body: [{"id":2,"name":"Books"},{"id":1,"name":"Other"}]
+rettailcore-frontend       |  HTTP  6/17/2026 2:05:12 PM 172.20.0.1 GET /vite.svg
+rettailcore-frontend       |  HTTP  6/17/2026 2:05:12 PM 172.20.0.1 Returned 304 in 3 ms
+rettailcore-frontend       |  HTTP  6/17/2026 2:05:14 PM 172.20.0.1 GET /vite.svg
+rettailcore-frontend       |  HTTP  6/17/2026 2:05:14 PM 172.20.0.1 Returned 304 in 1 ms
+rettailcore-frontend       | 
+rettailcore-frontend       |  INFO  Gracefully shutting down. Please wait...
+[Krettailcore-frontend exited with code 0
+webstore-security-service  | 2026-06-17T14:05:57.040Z  INFO 1 --- [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+webstore-security-service  | 2026-06-17T14:05:57.042Z  INFO 1 --- [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+webstore-security-service  | 2026-06-17T14:05:57.046Z  INFO 1 --- [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+webstore-item-service      | 2026-06-17T14:05:57.079Z  INFO 1 --- [item-service] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+webstore-item-service      | 2026-06-17T14:05:57.081Z  INFO 1 --- [item-service] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+webstore-item-service      | 2026-06-17T14:05:57.083Z  INFO 1 --- [item-service] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+[Kwebstore-security-service exited with code 143
+[Kwebstore-item-service exited with code 143
+webstore-postgres          | 2026-06-17 14:05:58.950 UTC [1] LOG:  received fast shutdown request
+webstore-postgres          | 2026-06-17 14:05:58.993 UTC [1] LOG:  aborting any active transactions
+webstore-postgres          | 2026-06-17 14:05:59.000 UTC [1] LOG:  background worker "logical replication launcher" (PID 31) exited with exit code 1
+webstore-postgres          | 2026-06-17 14:05:59.003 UTC [26] LOG:  shutting down
+webstore-postgres          | 2026-06-17 14:05:59.047 UTC [26] LOG:  checkpoint starting: shutdown immediate
+webstore-postgres          | 2026-06-17 14:05:59.222 UTC [26] LOG:  checkpoint complete: wrote 0 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.220 s; sync files=0, longest=0.000 s, average=0.000 s; distance=0 kB, estimate=1 kB
+webstore-postgres          | 2026-06-17 14:05:59.234 UTC [1] LOG:  database system is shut down
+[Kwebstore-postgres exited with code 0

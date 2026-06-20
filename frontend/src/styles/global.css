@@ -1,3 +1,11 @@
+html,
+body,
+#app {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
 /* Disable caret and text selection globally */
 * {
   user-select: none; /* Prevents text selection */
@@ -63,24 +71,27 @@ input, textarea, select, button {
     font-weight: bold;
   }
   
-  nav {
+  .register-container nav,
+  .login-container nav {
     text-align: center;
     margin: 20px 0;
   }
   
-  nav a {
+  .register-container nav a,
+  .login-container nav a {
     text-decoration: none;
     color: #42b983;
     font-weight: bold;
     margin: 0 10px;
   }
   
-  nav a:hover {
+  .register-container nav a:hover,
+  .login-container nav a:hover {
     color: #369e6f;
   }
   
 /* Items */
-  .item-image {
+  .grid-container .item-image {
     max-width: 100%; /* Image width will not exceed its container */
     height: auto;     /* Maintain aspect ratio */
     object-fit: contain; /* Ensure the entire image is visible */
@@ -122,7 +133,7 @@ input, textarea, select, button {
 }
 
 /* Image styling */
-.item-image {
+.grid-container .item-image {
   max-width: 100%;
   max-height: 150px;
   object-fit: cover; /* Maintain aspect ratio */

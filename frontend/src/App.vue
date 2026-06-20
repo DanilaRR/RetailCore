@@ -9,9 +9,9 @@
       <router-link v-if="!isLoggedIn" to="/register" class="nav-link">Register</router-link>
       <span v-if="!isLoggedIn" class="separator"> | </span>
       <router-link v-if="!isLoggedIn" to="/login" class="nav-link">Login</router-link>
+      <button v-if="isLoggedIn" @click="logout" class="logout-button">Logout</button>
     </nav>
     <router-view />
-    <button v-if="isLoggedIn" @click="logout" class="logout-button">Logout</button>
   </div>
 </template>
 
@@ -52,6 +52,7 @@ const logout = () => {
 .home-container {
   min-height: 100vh;
   background-color: #f5f5f5;
+  width: 100%;
 }
 
 .navbar {
@@ -61,6 +62,11 @@ const logout = () => {
   display: flex;
   gap: 15px;
   align-items: center;
+  margin: 0;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 300;
 }
 
 .nav-link {
@@ -80,9 +86,8 @@ const logout = () => {
 }
 
 .logout-button {
-  position: fixed;
-  top: 20px;
-  right: 20px;
+  margin-left: auto;
+  position: static;
   padding: 10px 20px;
   background-color: #dc3545;
   color: white;
@@ -91,7 +96,7 @@ const logout = () => {
   cursor: pointer;
   font-size: 14px;
   font-weight: bold;
-  z-index: 100;
+  width: auto;
 }
 
 .logout-button:hover {

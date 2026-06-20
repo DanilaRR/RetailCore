@@ -20,8 +20,15 @@
     </p>
     <div v-else class="items-grid">
       <article v-for="item in items" :key="item.id" class="item-card">
-        <div class="item-image" :style="{ backgroundImage: item.image ? `url(${item.image})` : 'none' }">
-          {{ !item.image ? '📦' : '' }}
+        <div class="item-image">
+          <img
+            v-if="item.image"
+            :src="item.image"
+            :alt="item.name"
+            class="item-image-media"
+            loading="lazy"
+          />
+          <span v-else class="item-image-placeholder">📦</span>
         </div>
         <div class="item-content">
           <h3>{{ item.name }}</h3>
@@ -412,9 +419,11 @@ onMounted(async () => {
 
 <style scoped>
 .category-details-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 28px 20px 48px;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 28px 24px 48px;
+  box-sizing: border-box;
 }
 
 .page-header {
@@ -499,14 +508,13 @@ h1 {
 
 .items-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 16px;
 }
 
 .item-card {
   display: flex;
   flex-direction: column;
-  aspect-ratio: 1;
   border: 1px solid #d7dee8;
   border-radius: 12px;
   padding: 16px;
@@ -514,6 +522,7 @@ h1 {
   position: relative;
   overflow: hidden;
   transition: all 0.2s ease;
+  min-height: 260px;
 }
 
 .item-card:hover {
@@ -523,18 +532,28 @@ h1 {
 }
 
 .item-image {
-  font-size: 48px;
-  text-align: center;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   margin-bottom: 12px;
-  height: 100px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   border-radius: 8px;
+  background-color: #f0f0f0;
+  overflow: hidden;
+}
+
+.item-image-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.item-image-placeholder {
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f0f0f0;
+  font-size: 48px;
 }
 
 .item-content {
