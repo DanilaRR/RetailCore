@@ -1,8 +1,9 @@
 <template>
   <div class="home-container">
     <nav class="navbar">
-      <!-- Show Home only if logged in -->
+      <!-- Show Home and Categories only if logged in -->
       <router-link v-if="isLoggedIn" to="/home" class="nav-link">Home</router-link>
+      <router-link v-if="isLoggedIn" to="/categories" class="nav-link">Catalog</router-link>
 
       <!-- Show Register and Login only if not logged in -->
       <router-link v-if="!isLoggedIn" to="/register" class="nav-link">Register</router-link>

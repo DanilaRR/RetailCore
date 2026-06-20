@@ -72,9 +72,9 @@ const login = async () => {
     localStorage.setItem('token', response.data);
     message.value = 'Login successful! Redirecting...';
 
-    // Redirect to home after a short delay
+    // Redirect to categories after a short delay
     setTimeout(() => {
-      router.push('/items');
+      router.push('/categories');
     }, 500);
   } catch (error: any) {
     isError.value = true;

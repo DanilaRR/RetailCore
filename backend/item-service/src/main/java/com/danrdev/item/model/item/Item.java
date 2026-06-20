@@ -32,6 +32,9 @@ public class Item {
     @Column(nullable = false)
     private BigDecimal price;
 
+    @Column(columnDefinition = "TEXT")
+    private String imageData; // Base64 encoded image
+
     public Item() {
     }
 
@@ -72,16 +75,24 @@ public class Item {
         this.price = price;
     }
 
+    public String getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(String imageData) {
+        this.imageData = imageData;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         Item item = (Item) object;
-        return Objects.equals(id, item.id) && Objects.equals(name, item.name) && Objects.equals(category, item.category) && Objects.equals(price, item.price);
+        return Objects.equals(id, item.id) && Objects.equals(name, item.name) && Objects.equals(category, item.category) && Objects.equals(price, item.price) && Objects.equals(imageData, item.imageData);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, category, price);
+        return Objects.hash(id, name, category, price, imageData);
     }
 }

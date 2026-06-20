@@ -1,16 +1,19 @@
 import { createRouter, createWebHistory, type NavigationGuardNext, type RouteLocationNormalized } from 'vue-router';
 import Register from '@/views/Register.vue';
 import Login from '@/views/Login.vue';
-import Items from '@/views/Items.vue';
 import Home from '@/views/Home.vue';
+import Categories from '@/views/Categories.vue';
+import CategoryDetails from '@/views/CategoryDetails.vue';
 
 const routes = [
   { path: '/', redirect: '/login' }, 
   { path: '/register', component: Register },
   { path: '/login', component: Login },
-  { path: '/items', component: Items, meta: { requiresAuth: true } },
+  { path: '/items', redirect: '/categories' },
   { path: '/home', component: Home, meta: { requiresAuth: true } },
-  { path: '/:pathMatch(.*)*', redirect: '/login' }, 
+  { path: '/categories', component: Categories, meta: { requiresAuth: true } },
+  { path: '/category/:categoryId', component: CategoryDetails, meta: { requiresAuth: true } },
+  { path: '/:pathMatch(.*)*', redirect: '/login' },
 ];
 
 const router = createRouter({

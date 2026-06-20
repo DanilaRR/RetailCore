@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/items")
@@ -74,5 +76,29 @@ public class ItemController {
     public ResponseEntity<Void> updateItem(@PathVariable Long id, @RequestBody UpdateItemRequest request) {
         itemService.updateItem(id, request);
         return ResponseEntity.noContent().build(); // 204 No Content
+    }
+
+    @PostMapping("/{id}/upload-image")
+    public ResponseEntity<?> uploadImage(@PathVariable Long id, @RequestBody Map<String, String> request) {
+        try {
+            String imageData = request.get("imageData");
+            itemService.saveItemImage(id, imageData);
+            return ResponseEntity.ok(new ErrorResponse("Image uploaded successfully"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<?> getImage(@PathVariable Long id) {
+        return itemService.getItemImage(id)
+                .map(image -> {
+                    Map<String, String> response = new java.util.HashMap<>();
+                    response.put("imageData", image);
+                    return ResponseEntity.ok(response);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 }
